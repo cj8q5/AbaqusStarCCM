@@ -1,0 +1,131 @@
+# Input file for running fluid structure interaction (FSI) simulations by coupling the codes Star-CCM+ and Abaqus
+#
+# This file must be in the same directory as the four following files
+#		AbaqusStarCCM.exe - This file runs both of the proceeding, run this file to start the whole thing
+#		Abaqus.py - This file creates the geometry, and meshes for both the plate and fluid in Abaqus
+#		Star.java - This file runs in Star-CCM+. It imports the fluid mesh created in Abaqus
+#			NOTE: A Java jar file must also be referenced within the Star-CCM+ environment
+#
+# 	Written by Casey J. Jesse in June 2013 at the University of Missouri - Columbia
+#	Revisions:
+#		July 11, 2013 -  Plate mesh parameters were added to create biases in the plate's mesh 
+#		November 13, 2014 - Many updates have been done since 2013
+
+#######################################SIMULATION BUILD OPTIONS#######################################
+
+# OVERALL GEOMETRY OPTIONS
+numOfPlates:		integer:	1:				'Specifies the number of plates in the model'
+plateGeometry:		string:		Flat:			'This determines if the geometry is "Flat" or "Curved"'
+pinOrCombBC:		string:		none:			'"pin", "comb", or "none"'
+
+# ABAQUS MODEL OPTIONS
+abqExecutable:		string:		abq6131.bat:	'Specifies the executable name for Abaqus'
+abaqusCPUs:			integer:	6:				'The number of CPU's Abaqus will be using'
+createAbqInpFiles:  string:		yes:			'Switch for creating new Abaqus input files'
+saveCAEFiles:		string:		no:				'Switch for saving CAE files for the plate and fluid'
+abqSolver:			string:		QUASI-STATIC:	'The dynamic solver in Abaqus (TRANSIENT FIDELITY or QUASI-STATIC)'
+minTimeStep:		float:		0.00000001:		'The minimum coupling time step for Abaqus'
+
+# STAR-CCM+ MODEL OPTIONS
+createLogFile:		string:		no:			'Specifies if a log will be created, a cmd window will not open if 'yes''
+starVersion:		string:		9_02:			'Specifies the version of star being used'
+starProcesses:		string: 	6:				'The number of processes to use in Star-CCM+'
+createStarFile:		string:		yes:			'Specifies if the Star-CCM+ model is created'
+runStar:			string:		yes:			'Switch for running Star-CCM+ after fluid/solid model building'
+fluidSolver:		string:		Segregated:		'The fluid solver either Coupled or Segregated'
+avgChVelocity:		float: 		6.0:			'The average channel flow velocity'
+fluidStopCriteria:	string:		true:			'StarCCM+ stopping criteria'
+courantNumber:		float:		50:				'The CFL number of Star-CCM+ Coupled Solver'
+
+# FSI COUPLING OPTIONS
+CFDOrFSI:			string:		CFD:			'For running the simulation in "CFD" or "FSI" mode'
+couplingScheme:		string:		Explicit:		'The coupling scheme for FSI, "Explicit" or "Implicit"'
+timeStep:			float:		10.0:			'The FSI coupling time step'
+maxSimTime:			float:		10.0:			'The maximum time in the simulation'
+numImplicitExch:	integer:	20:				'The number of exchanges within a TS for Implicit coupling'
+iterPerExch:		integer:	25:				'The number of StarCCM+ iterations per exchange'
+iterPerTS:			integer:	2:			'The number of iterations in StarCCM+ per TS'
+guessedAbaqusStep:	string:		no:				'The FSI model has steady-state Abaqus step initially'
+
+# STAR-CCM+ FSI OPTIONS
+plateUnderRelax:	float:		1.0:			'The under relaxation factor for plate deflection'
+morphAtInnIter:		string:		no:				'Morph fluid mesh at inner iterations'
+
+# PARAMETRIC STUDY OPTIONS
+parametricSwitch:	string:		false:			'Switch for parametric mode'
+parameter2Change:	string:		plateLength:	'Interested parameter in the study, must match a parameter name in this input file'
+minParameter:		float:		0.2:			'Minimum value for the changing parameter in the study'
+maxParameter:		float:		1.2:			'Maximum value for the changing parameter in the study'
+stepSize:			float:		0.2:			'Step size to change the interested parameter by'
+
+
+##############################PLATE GEOMETRY/MATERIAL/MESH SPECIFICATIONS#############################
+
+# PLATE GEOMETRY SPECIFICATIONS/OPTIONS
+plateLength:		float:		0.4:			'This is the length of the plate in meters'
+plateWidth:			float:		0.1102868:		'This is the width of the plate in meters'
+plateThickness:		float: 		0.001016:		'This is the thickness of the plate in meters'
+
+# PLATE MATERIAL PROPERTIES
+plateMaterial:		string:		Al-6061:		'The material of the plate'
+elasticModulus:		float:		68900000000:	'The elastic modulus of the plate'
+poissonsRatio:		float:		0.33:			'The Poisson's ratio of the plate'
+plateDensity:		float:		2700.0:			'The density of the plate'
+
+# PLATE MESH SPECIFICATIONS
+seedMethod:			string:		size:			'Specifies how to seed the meshes, "number" or "size"'
+elemType:			string:		SC8R:			'Elements to use in plate mesh (use Abaqus element names)'
+
+solidThick_1:		float:		1.016e-3:		'The number of nodes through the plate thickness'
+solidThick_2:		float:		1.016e-3:		'The bias ratio through the plate thickness'
+
+solidLength_1:		float: 		6.477e-3:		'The number of nodes along the plate length'
+solidLength_2:		float: 		6.477e-3:		'The bias ratio along the plate length'
+
+solidWidth_1:		float:		1.103e-3:		'The number of nodes along the plate width'
+solidWidth_2:		float:		1.103e-3:		'The bias ratio along the plate width'
+
+clampedWidth_1:		float:		4.233e-3:		'The number of nodes along the clamped width'
+clampedWidth_2:		float:		4.233e-3:		'The bias ratio along the clamped width'
+
+
+############################FLUID GEOMETRY/MATERIAL/MESH SPECIFICATIONS##############################
+
+# FLUID GEOMETRY SPECIFICATIONS
+smChHeight:			float:		0.002032:		'This is the thickness of the small fluid channel'
+lgChHeight:			float:		0.00254:		'This is the thickness of the large fluid channel'
+inletPlLength:		float:		0.1905:			'This is the length of the inlet plenum'
+outletPlLength:		float:		0.0762:			'This is the length of the outlet plenum'
+
+# FLUID MATERIAL PROPERTIES
+fluidMaterial:		string:		Water:			'The material of the fluid'
+fluidDensity:		float:		997.561:		'The density of the fluid'
+fluidViscosity:		float:		8.8871e-4:		'The viscosity of the fluid'
+
+# PLATE MESH OPTIONS
+chBiasDirection:	string:		End:			'For biasing towards the "Center" or the "End"'
+lowOrHighyPlus:		string:		High:			'"High" for controlling wall cell height'
+
+# FLUID MESH SPECIFICATIONS
+flPlLen_1:			float:		1.176e-3:		'The number of nodes or min cell size on plate length'
+flPlLen_2:			float:		4.700e-3:		'The bias ratio or max cell size on plate length'
+
+flPlWidth_1:		float:		1.697e-3:		'The number of nodes or min cell size on plate width'
+flPlWidth_2:		float:		1.697e-3:		'The bias ratio or max cell size on plate width'
+
+flInlet_1:			float:		1.176e-3:		'The number of nodes or min cell size inlet length'
+flInlet_2:			float:		4.700e-3:		'The bias ratio or max cell size on inlet length'
+
+flOutlet_1:			float:		1.176e-3:		'The number of nodes or min cell size on outlet length'
+flOutlet_2:			float:		4.700e-3:		'The bias ratio or max cell size on inlet length'
+
+flSmChHeight_1:		float:		1.200e-4:		'The number of nodes or min cell size through small ch.'
+flSmChHeight_2:		float: 		1.200e-4:		'The bias ratio or max cell size through small ch.'
+flSmChWallCellHgt:	float:		1.800e-4:		'The height of the near wall cells in the small ch.'
+
+flLgChHeight_1:		float:		1.220e-4:		'The number of nodes or min cell size through large ch.'
+flLgChHeight_2:		float: 		1.220e-4:		'The bias ratio or max cell size through large ch.'
+flLgChWallCellHgt:	float:		1.800e-4:		'The height of the near wall cell in the large ch.'
+
+flPlHeight_1:		float:		1.280e-4:		'The number of nodes or min cell size through plate height'
+flPlHeight_2:		float: 		1.280e-4:		'The bias ratio or max cell size through plate height'
