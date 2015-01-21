@@ -27,24 +27,24 @@ abqSolver:			string:		QUASI-STATIC:	'The dynamic solver in Abaqus (TRANSIENT FID
 minTimeStep:		float:		0.00000001:		'The minimum coupling time step for Abaqus'
 
 # STAR-CCM+ MODEL OPTIONS
-createLogFile:		string:		no:			'Specifies if a log will be created, a cmd window will not open if 'yes''
-starVersion:		string:		9_02:			'Specifies the version of star being used'
-starProcesses:		string: 	6:				'The number of processes to use in Star-CCM+'
-createStarFile:		string:		yes:			'Specifies if the Star-CCM+ model is created'
-runStar:			string:		yes:			'Switch for running Star-CCM+ after fluid/solid model building'
-fluidSolver:		string:		Segregated:		'The fluid solver either Coupled or Segregated'
-avgChVelocity:		float: 		6.0:			'The average channel flow velocity'
-fluidStopCriteria:	string:		true:			'StarCCM+ stopping criteria'
-courantNumber:		float:		50:				'The CFL number of Star-CCM+ Coupled Solver'
+jarFileName:		string:		Star_9_Abaqus_613:	'Name of the Java Jar file that contains StarClasses'
+starVersion:		string:		9_02:				'Specifies the version of star being used'
+starProcesses:		string: 	6:					'The number of processes to use in Star-CCM+'
+createStarFile:		string:		yes:				'Specifies if the Star-CCM+ model is created'
+runStar:			string:		no:				'Switch for running Star-CCM+ after fluid/solid model building'
+fluidSolver:		string:		Segregated:			'The fluid solver either Coupled or Segregated'
+avgChVelocity:		float: 		6.0:				'The average channel flow velocity'
+fluidStopCriteria:	string:		true:				'StarCCM+ stopping criteria'
+courantNumber:		float:		50:					'The CFL number of Star-CCM+ Coupled Solver'
 
 # FSI COUPLING OPTIONS
-CFDOrFSI:			string:		CFD:			'For running the simulation in "CFD" or "FSI" mode'
+CFDOrFSI:			string:		FSI:			'For running the simulation in "CFD" or "FSI" mode'
 couplingScheme:		string:		Explicit:		'The coupling scheme for FSI, "Explicit" or "Implicit"'
-timeStep:			float:		10.0:			'The FSI coupling time step'
+timeStep:			float:		0.1:			'The FSI coupling time step'
 maxSimTime:			float:		10.0:			'The maximum time in the simulation'
 numImplicitExch:	integer:	20:				'The number of exchanges within a TS for Implicit coupling'
 iterPerExch:		integer:	25:				'The number of StarCCM+ iterations per exchange'
-iterPerTS:			integer:	2:			'The number of iterations in StarCCM+ per TS'
+iterPerTS:			integer:	350:			'The number of iterations in StarCCM+ per TS'
 guessedAbaqusStep:	string:		no:				'The FSI model has steady-state Abaqus step initially'
 
 # STAR-CCM+ FSI OPTIONS
@@ -62,7 +62,7 @@ stepSize:			float:		0.2:			'Step size to change the interested parameter by'
 ##############################PLATE GEOMETRY/MATERIAL/MESH SPECIFICATIONS#############################
 
 # PLATE GEOMETRY SPECIFICATIONS/OPTIONS
-plateLength:		float:		0.4:			'This is the length of the plate in meters'
+plateLength:		float:		0.6477:			'This is the length of the plate in meters'
 plateWidth:			float:		0.1102868:		'This is the width of the plate in meters'
 plateThickness:		float: 		0.001016:		'This is the thickness of the plate in meters'
 

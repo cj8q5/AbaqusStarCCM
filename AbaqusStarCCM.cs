@@ -244,30 +244,11 @@ public class AbaqusStarCCM
             end = "\n\t Star-CCM+ has finished building the fluid model and the " + m_mode + " problem!\n";
         }
         Console.WriteLine("\n\t Star-CCM+ is now building the fluid model and setting up the " + m_mode + " problem...\n" + run);
-        string buildStarCall = "/C starccm+ -new -np " + starProcesses + " -batch StarScript.java -batch-report";
+        string buildStarCall = "/C starccm+ -new -np " + starProcesses + " -batch StarScript.java -batch-report -classpath " + 
+            Path.Combine(m_currentDirectory, getStringData("jarFileName") + ".jar");
 		
-		if (getStringData("createLogFile").Equals("yes"))
-		{
-			Process starP = new Process();
-			starP.StartInfo.UseShellExecute = false;
-			starP.StartInfo.RedirectStandardOutput = true;
-			starP.StartInfo.FileName = "cmd.exe";
-			starP.StartInfo.Arguments = buildStarCall;
-			starP.Start();
-			string output = starP.StandardOutput.ReadToEnd();
-			starP.WaitForExit();
-			
-			// Exporting the log to a generic text file
-			using (StreamWriter file = new StreamWriter(m_starOutputFile))
-			{
-				file.Write(output);
-			}
-        }
-		else
-		{
-			var starProcess = Process.Start("cmd.exe", buildStarCall);
-			starProcess.WaitForExit();
-		}
+		var starProcess = Process.Start("cmd.exe", buildStarCall);
+		starProcess.WaitForExit();
 		Console.WriteLine(end);
     }
     /*
